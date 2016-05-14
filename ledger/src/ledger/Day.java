@@ -53,7 +53,7 @@ public class Day extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 showMemo();
             }
-        });
+        }); 
         rateSubPanel.add(detailBut);
         rateSubPanel.add(testBut);
         ratePanel.setLayout(new BorderLayout());

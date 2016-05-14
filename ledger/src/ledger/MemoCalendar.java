@@ -82,7 +82,7 @@ public class MemoCalendar extends CalendarDataManager{ // CalendarDataManager의 
     
     public void showYear(){
         this.year = new Year(); // 테스트프레임 오픈
-    }
+    } 
     ////////////////////////////
     Input input;
     
