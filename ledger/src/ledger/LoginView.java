@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 
 public class LoginView implements ActionListener{
  //MainProcess main;
- JButton button_reset, button_login, button_signup;
+ JButton button_reset, button_login, button_signup, button_forgot;
  CardLayout cardLayoutSet;
  JPanel cardPanel;
  //JFrame frame;
@@ -73,7 +73,7 @@ public class LoginView implements ActionListener{
   passText.setBounds(100, 40, 160, 25);
   panel.add(passText);
   
-  JButton btnInit = new JButton("Reset");
+  JButton btnInit = new JButton("다시 입력");
   btnInit.setBounds(10, 80, 100, 25);
   panel.add(btnInit);
   btnInit.addActionListener(new ActionListener() {
@@ -85,7 +85,7 @@ public class LoginView implements ActionListener{
   });
   
   
-  JButton login_submit = new JButton("Submit");
+  JButton login_submit = new JButton("로그인");
   login_submit.setBounds(10, 80, 100, 25);
   panel.add(login_submit);
   login_submit.addActionListener(new ActionListener() {
@@ -147,7 +147,7 @@ public class LoginView implements ActionListener{
  public Container panel3(){
   JPanel panel = new JPanel();
   
-  JLabel fullnameLabel = new JLabel("Fullname");
+  JLabel fullnameLabel = new JLabel("Fullname ");
   fullnameLabel.setBounds(10, 10, 80, 25);
   panel.add(fullnameLabel);
  
@@ -158,11 +158,15 @@ public class LoginView implements ActionListener{
   JLabel userLabel = new JLabel("Username");
   userLabel.setBounds(10, 10, 80, 25);
   panel.add(userLabel);
- 
+  
   JTextField userText = new JTextField(20);
   userText.setBounds(100, 10, 160, 25);
+  userText.setColumns(15);
   panel.add(userText);
 
+  JButton duplicate = new JButton("중복검사");
+  panel.add(duplicate);
+  
   JLabel passLabel = new JLabel("Password");
   passLabel.setBounds(10, 40, 80, 25);
   panel.add(passLabel);  
@@ -216,7 +220,7 @@ public class LoginView implements ActionListener{
   answerText.setBounds(100, 40, 160, 25);
   panel.add(answerText);
   
-  JButton btnInit = new JButton("Reset");
+  JButton btnInit = new JButton("다시 입력");
   btnInit.setBounds(10, 80, 100, 25);
   panel.add(btnInit);
   
@@ -233,7 +237,7 @@ public class LoginView implements ActionListener{
   });
   
   
-  JButton submit = new JButton("Submit");
+  JButton submit = new JButton("가입");
   btnInit.setBounds(10, 80, 100, 25);
   panel.add(submit);
   
@@ -318,14 +322,19 @@ public class LoginView implements ActionListener{
   JPanel panel = new JPanel(new BorderLayout());
   panel.add(cardPanel);
   
-  button_login = new JButton("로그인");
-  button_login.setBounds(10, 80, 100, 25);
-  button_signup = new JButton("새 계정");
-  button_signup.setBounds(10, 80, 100, 25);
-  JPanel buttonLayout = new JPanel();
-  buttonLayout.add(button_login);
-  buttonLayout.add(button_signup);
   
+  
+  button_login = new JButton("로그인 화면");
+  // button_login.setBounds(10, 80, 100, 25);
+  button_signup = new JButton("새 계정");
+  //button_signup.setBounds(10, 80, 100, 25);
+  //button_forgot = new JButton("아이디/비밀번호 분실");
+  //button_forgot.setBounds(10, 80, 100, 25);
+  JPanel buttonLayout = new JPanel(new BorderLayout());
+  buttonLayout.add(button_login,BorderLayout.BEFORE_FIRST_LINE);
+  buttonLayout.add(button_signup,BorderLayout.AFTER_LAST_LINE);
+  //buttonLayout.add(button_forgot, BorderLayout.WEST);
+  panel.add(buttonLayout, BorderLayout.PAGE_END);
   
   button_login.addActionListener(this);
   button_signup.addActionListener(this);
