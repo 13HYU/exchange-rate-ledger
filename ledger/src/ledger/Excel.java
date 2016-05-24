@@ -59,7 +59,7 @@ public class Excel extends JFrame {
 	  this.username = u;
       main1Frame = new JFrame(title);
       main1Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-      main1Frame.setSize(500,200);
+      main1Frame.setSize(600,200);
       main1Frame.setLocationRelativeTo(null);
       main1Frame.setResizable(false);
       
@@ -81,12 +81,6 @@ public class Excel extends JFrame {
       df2 = new JTextField(3);
       yf2 = new JTextField(5);
 
-      /*   sm = Integer.parseInt(mf.getText());
-      sd = Integer.parseInt(df.getText());
-      sy = Integer.parseInt(yf.getText());
-      sm2 = Integer.parseInt(mf2.getText());
-      sd2 = Integer.parseInt(df2.getText());
-      sy2 = Integer.parseInt(yf2.getText());*/
       datep.setLayout(new FlowLayout());
       datep.add(M);
       datep.add(mf);
