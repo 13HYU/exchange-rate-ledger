@@ -5,8 +5,11 @@ import java.sql.*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -65,7 +68,7 @@ public class LoginView implements ActionListener{
   userText.setBounds(100, 10, 160, 25);
   panel.add(userText);
 
-  JLabel passLabel = new JLabel("Password");
+  JLabel passLabel = new JLabel("Password  ");
   passLabel.setBounds(10, 40, 80, 25);
   panel.add(passLabel);  
   
@@ -73,9 +76,15 @@ public class LoginView implements ActionListener{
   passText.setBounds(100, 40, 160, 25);
   panel.add(passText);
   
+  JPanel blank_layout = new JPanel(new BorderLayout());
+  JLabel blank = new JLabel("<html><br><br></html>");
+  blank_layout.add(blank, BorderLayout.CENTER);
+  panel.add(blank_layout);
+ 
+  
   JButton btnInit = new JButton("다시 입력");
   btnInit.setBounds(10, 80, 100, 25);
-  panel.add(btnInit);
+  //panel.add(btnInit);
   btnInit.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -87,7 +96,6 @@ public class LoginView implements ActionListener{
   
   JButton login_submit = new JButton("로그인");
   login_submit.setBounds(10, 80, 100, 25);
-  panel.add(login_submit);
   login_submit.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -140,6 +148,67 @@ public class LoginView implements ActionListener{
       }
   });
  
+  JPanel layout = new JPanel(new BorderLayout());
+  
+  
+  JLabel username_loss = new JLabel("<html><br>Find username</html>");
+  JLabel password_loss = new JLabel("<html><br>Find password</html>");
+  
+  username_loss.addMouseListener(new MouseAdapter() {
+      public void mouseEntered(MouseEvent me) {
+         username_loss.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      }
+      public void mouseExited(MouseEvent me) {
+         username_loss.setCursor(Cursor.getDefaultCursor());
+      }
+      public void mouseClicked(MouseEvent me)
+      {
+         System.out.println("Clicked on Label...");
+         try {
+        	  Username_loss username_loss = new Username_loss();
+              //username_loss.setPage(new URL(strURL));
+           }
+           catch(Exception e) {
+              System.out.println(e);
+           }
+      }
+     });
+  
+  
+  password_loss.addMouseListener(new MouseAdapter() {
+      public void mouseEntered(MouseEvent me) {
+         password_loss.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      }
+      public void mouseExited(MouseEvent me) {
+         password_loss.setCursor(Cursor.getDefaultCursor());
+      }
+      public void mouseClicked(MouseEvent me)
+      {
+         System.out.println("Clicked on Label...");
+         try {
+        	 Password_loss password_loss = new Password_loss("smtp.gmail.com");
+              //username_loss.setPage(new URL(strURL));
+           }
+           catch(Exception e) {
+              System.out.println(e);
+           }
+      }
+     });
+  
+  
+  JPanel init_login = new JPanel(new BorderLayout());
+  init_login.add(btnInit,BorderLayout.LINE_START);
+  init_login.add(login_submit, BorderLayout.LINE_END);
+  layout.add(init_login, BorderLayout.BEFORE_FIRST_LINE);
+  
+  JPanel loss_layout = new JPanel(new BorderLayout());
+  loss_layout.add(username_loss, BorderLayout.BEFORE_FIRST_LINE);
+  loss_layout.add(password_loss, BorderLayout.AFTER_LAST_LINE);
+  layout.add(loss_layout, BorderLayout.AFTER_LAST_LINE);
+  
+  panel.add(layout);
+  
+  
   return panel;
   
  }
@@ -166,6 +235,44 @@ public class LoginView implements ActionListener{
 
   JButton duplicate = new JButton("중복검사");
   panel.add(duplicate);
+  duplicate.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+    	 String username = userText.getText();
+    	 try{
+             Class.forName("com.mysql.jdbc.Driver");
+             System.out.println("mysql 로딩완료");
+             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
+             System.out.println("데이터베이스 연결 성공");
+             stmt = con.createStatement();
+             String sql = "select fullname from account where username='"+username+"'";
+             rs = stmt.executeQuery(sql);
+             
+             if(rs.next()){
+            	JOptionPane.showMessageDialog(null, "사용할 수 없는 username입니다","중복 username 사용", JOptionPane.PLAIN_MESSAGE);
+            	userText.setText("");
+             }
+            else
+            	JOptionPane.showMessageDialog(null, "사용 가능한 username입니다","username 사용가능", JOptionPane.PLAIN_MESSAGE);   
+          }
+          
+          catch(ClassNotFoundException ex1){
+            System.out.println("mysql드라이버 찾을 수 없음");
+            }
+         catch(SQLException ex2){
+            System.out.println("sql실패");
+            }
+         catch(Exception ex3){
+            System.out.println(ex3.toString());
+            }
+         finally{
+            System.out.println("DB연결 성공!");
+         }
+        
+      }
+  });
+
+  
   
   JLabel passLabel = new JLabel("Password");
   passLabel.setBounds(10, 40, 80, 25);
@@ -250,13 +357,30 @@ public class LoginView implements ActionListener{
          String email;
          String question;
          String answer;
+         String repassword;
          
          fullname = fullnameText.getText();
-          username = userText.getText();
-          password = passText.getText();
-          email = emailText.getText();
-          question = questionBox.getSelectedItem().toString();
-          answer = answerText.getText();
+         username = userText.getText();
+         password = passText.getText();
+         repassword = repassText.getText();
+         
+         email = emailText.getText();
+         question = questionBox.getSelectedItem().toString();
+         answer = answerText.getText();
+          
+          if(!password.equals(repassword)){
+        	  JOptionPane.showMessageDialog(null, "비밀번호를 다시 입력해주십시오","비밀번호가 다릅니다", JOptionPane.PLAIN_MESSAGE);
+        	  passText.setText("");
+        	  repassText.setText("");
+        	  passText.hasFocus();
+          }
+          
+          if(fullname.equals("")||username.equals("")||password.equals("")||repassword.equals("")||email.equals("")||answer.equals("")){
+        	  JOptionPane.showMessageDialog(null, "빈 칸을 모두 채워주십시오","빈 칸", JOptionPane.PLAIN_MESSAGE);
+
+          }
+        	  
+          
           
           try{
                Class.forName("com.mysql.jdbc.Driver");
@@ -371,7 +495,6 @@ public class LoginView implements ActionListener{
   
   test.createFrame();
  }
-
-
  
+
 }
