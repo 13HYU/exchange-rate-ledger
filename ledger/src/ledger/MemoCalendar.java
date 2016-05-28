@@ -199,7 +199,7 @@ public class MemoCalendar extends CalendarDataManager{
       version = new JMenuItem("버전");
       info = new JMenuItem("정보");
       
-      fileMenu.add(new JMenuItem("환경설정"));
+      //fileMenu.add(new JMenuItem("환경설정"));
       fileMenu.add(logout);
       helpMenu.add(version);
       helpMenu.add(info);
@@ -207,6 +207,16 @@ public class MemoCalendar extends CalendarDataManager{
       version.addActionListener(action);
       info.addActionListener(action);
       logout.addActionListener(action);
+      
+      JMenuItem settings = new JMenuItem("환경설정");
+      fileMenu.add(settings);
+      settings.addActionListener(new ActionListener(){
+    	  @Override
+          public void actionPerformed(ActionEvent e){
+    		  Settings settings = new Settings(username);
+    	  }
+      });
+      
       
       JMenuItem excelfile = new JMenuItem("엑셀로 저장하기");
       fileMenu.add(excelfile);
