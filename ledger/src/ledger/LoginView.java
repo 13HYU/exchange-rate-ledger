@@ -32,31 +32,7 @@ public class LoginView implements ActionListener{
 
  public LoginView(){}
  
- public Container panel1(){
-     JPanel panel = new JPanel();
-
-     JLabel userLabel = new JLabel("Username");
-     userLabel.setBounds(10, 10, 80, 25);
-     panel.add(userLabel);
-    
-     JTextField userText = new JTextField(20);
-     userText.setBounds(100, 10, 160, 25);
-     panel.add(userText);
-
-     JLabel passLabel = new JLabel("Password");
-     passLabel.setBounds(10, 40, 80, 25);
-     panel.add(passLabel);  
-     
-     JTextField passText = new JPasswordField(20);
-     passText.setBounds(100, 40, 160, 25);
-     panel.add(passText);
-
-    
-     return panel;
-
- }
- 
- public Container panel2(){
+ public Container login_panel(){
 
   JPanel panel = new JPanel();
 
@@ -213,7 +189,7 @@ public class LoginView implements ActionListener{
   
  }
 
- public Container panel3(){
+ public Container signup_panel(){
   JPanel panel = new JPanel();
   
   JLabel fullnameLabel = new JLabel("Fullname ");
@@ -440,9 +416,8 @@ public class LoginView implements ActionListener{
   cardPanel.setLayout(cardLayoutSet);
   LoginView test = new LoginView();
   // 이름을 설정
-  cardPanel.add("card2", test.panel2());
-  cardPanel.add("card1", test.panel1());
-  cardPanel.add("card3", test.panel3());
+  cardPanel.add("card1", test.login_panel());
+  cardPanel.add("card2", test.signup_panel());
   JPanel panel = new JPanel(new BorderLayout());
   panel.add(cardPanel);
   
@@ -484,9 +459,9 @@ public class LoginView implements ActionListener{
   // 자식의 자식인 불러올 패널의 이름을 적는다
   
   if(e.getSource() == button_login)
-   cardLayoutSet.show(cardPanel, "card2");
+   cardLayoutSet.show(cardPanel, "card1");
   else if(e.getSource() == button_signup)
-   cardLayoutSet.show(cardPanel, "card3");;
+   cardLayoutSet.show(cardPanel, "card2");;
  }
  
  public static void main(String[] args) {
