@@ -7,7 +7,10 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Vector;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 
 class CalendarDataManager{ // 6*7배열에 나타낼 달력 값을 구하는 class
@@ -22,6 +25,14 @@ class CalendarDataManager{ // 6*7배열에 나타낼 달력 값을 구하는 class
    Calendar today = Calendar.getInstance();
    Calendar cal;
    JMenuItem version, info, logout;
+
+   DefaultTableModel model;
+
+   Vector<String> userCol = new Vector<String>();
+   Vector<String> userRow = new Vector<String>(); 
+   JTable table1;
+   
+   int incsum, expsum;
    
    public CalendarDataManager(){ 
       setToday(); 
@@ -147,6 +158,11 @@ public class MemoCalendar extends CalendarDataManager{
        JButton YearBUT;
        JButton CateBut;
    
+       JLabel inc;
+       JLabel exp;
+       JLabel result;
+       JLabel todayLab2;
+       
    JPanel frameBottomPanel;
       JLabel bottomInfo = new JLabel("Welcome to Rate Ledger!");
       
@@ -545,14 +561,140 @@ public class MemoCalendar extends CalendarDataManager{
           statePanel.add(stateSubPanel, BorderLayout.WEST);
           statePanel.add(statesPanel, BorderLayout.CENTER);
           statePanel.add(Bottom, BorderLayout.SOUTH);
-            
+          
+          JPanel f = new JPanel();
+          JPanel p0 = new JPanel();
+          
+          JScrollPane scrollPane = new JScrollPane();
+          
+          inc = new JLabel("  ");
+          exp = new JLabel("  ");
+          result = new JLabel(" ");
+          
+
+          
+          todayLab2 = new JLabel(Integer.toString(calMonth+1)+"/"+calDayOfMon+"/"+calYear);
+          JButton New = new JButton("new");
+          New.addActionListener(new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                 DefaultTableModel model = (DefaultTableModel)table1.getModel();
+                 model.setNumRows(0);
+                  select();   
+              }
+          });
+          
+          Font font1 = new Font("SansSerif",Font.BOLD,30);
+          todayLab2.setFont(font1);
+          p0.setLayout(new BorderLayout());
+          p0.add(todayLab2, BorderLayout.CENTER);
+          p0.add(New, BorderLayout.EAST);
+
+          try {
+        	  String jdbcUrl = "jdbc:mysql://localhost:3306/test_db"; 
+              String userId = "root"; 
+              String userPass = "0zero6six"; 
+             Connection con = DriverManager.getConnection(jdbcUrl, userId, userPass); 
+             Statement stmt = con.createStatement();
+             stmt.close();
+             con.close();
+          } catch (SQLException e) { 
+             System.exit(0); 
+             }
+        
+         userCol.addElement("date"); 
+         userCol.addElement("inc/exp"); 
+         userCol.addElement("category"); 
+         userCol.addElement("details"); 
+         userCol.addElement("in foreign currency");
+         userCol.addElement("currency"); 
+         userCol.addElement("in Won");
+         model = (new DefaultTableModel(userCol, 0) {
+            /**
+          * 
+          */
+         private static final long serialVersionUID = 1L;
+
+         @Override 
+             public boolean isCellEditable(int row, int column) { 
+                // 셀의 편집을 막기 위한 부분 
+                return false; 
+            }
+         });
+         
+         table1 = new JTable(model);
+
+   //db 연결   
+          JPanel p1 = new JPanel();
+//          p1.setLayout(null);
+          p1.setLayout(new BorderLayout());
+          scrollPane = new JScrollPane(table1);
+          scrollPane.setSize(900, 300);
+          p1.add(scrollPane, BorderLayout.CENTER);
+          select();        
+           ///////////////////////////
+                
+          JPanel pp = new JPanel();
+          pp.setLayout(new FlowLayout());
+          pp.add(inc);
+          pp.add(exp);
+          pp.add(result);
+          p1.add(pp,  BorderLayout.SOUTH);
+
+          JPanel p2 = new JPanel();
+          
+          JButton btn1 = new JButton("Income");
+          btn1.setPreferredSize(new Dimension(120, 50)); 
+//          btn1.setBackground(new Color(50, 100, 200));
+          btn1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                     InputIncome input = new InputIncome(username, thisyear, thismonth, thisdate);
+
+                }
+            });
+           btn1.setForeground(new Color(50, 100, 200));
+           
+          JButton btn2 = new JButton("Expense");
+          btn2.setPreferredSize(new Dimension(120, 50)); 
+//          btn2.setBackground(new Color(50, 100, 200));
+           btn2.setForeground(new Color(50, 100, 200));
+           btn2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                     InputExpense input = new InputExpense(username, thisyear, thismonth, thisdate);
+
+      //             getContentPane().removeAll();
+       //             getContentPane().add(input2);
+        //            revalidate();
+         //           repaint();
+                }
+            });
+
+          p2.add(btn1);
+          p2.add(btn2);
+          
+          f.setLayout(new BorderLayout());
+          f.add(p0, BorderLayout.NORTH);
+          f.add(p1, BorderLayout.CENTER);
+          f.add(p2, BorderLayout.SOUTH);
+          
+         
+          
+          
       JPanel frameSubPanelWest = new JPanel();
       Dimension calOpPanelSize = calOpPanel.getPreferredSize();
       calOpPanelSize.height = 90;
       calOpPanel.setPreferredSize(calOpPanelSize);
+      
+      Dimension fSize = f.getPreferredSize();
+      fSize.height = 300;
+      f.setPreferredSize(fSize);
+      
       frameSubPanelWest.setLayout(new BorderLayout());
       frameSubPanelWest.add(calOpPanel,BorderLayout.NORTH);
       frameSubPanelWest.add(calPanel,BorderLayout.CENTER);
+      frameSubPanelWest.add(f, BorderLayout.SOUTH);
 
       //infoPanel, memoPanel을  frameSubPanelEast에 배치
       JPanel frameSubPanelEast = new JPanel();
@@ -755,13 +897,75 @@ public class MemoCalendar extends CalendarDataManager{
          thisyear = calYear;
          thismonth = calMonth;
          thisdate = calDayOfMon;
-         Input input = new Input(username, thisyear, thismonth, thisdate);
+         
+         todayLab2.setText(Integer.toString(thismonth+1)+"/"+calDayOfMon+"/"+calYear);
+         DefaultTableModel model = (DefaultTableModel)table1.getModel();
+         model.setNumRows(0);
+         select();  
 
         
       }
    }
-   
-   
+   public void select() {
+       int month2 = thismonth+1;
+       try{
+    		 Class.forName("com.mysql.jdbc.Driver");
+	         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
+             stmt = con.createStatement();
+             
+             rs = stmt.executeQuery("Select date, inc_or_exp, category, details, sum, currency, wonsum from "+username+" where date like '"+month2+"/"+thisdate+"/"+calYear+"'");
+             while(rs.next()){
+                 userRow = new Vector<String>(); 
+                 userRow.addElement(rs.getString(1));
+                 userRow.addElement(rs.getString(2)); 
+                 userRow.addElement(rs.getString(3)); 
+                 userRow.addElement(rs.getString(4)); 
+                 userRow.addElement(rs.getString(5)); 
+                 userRow.addElement(rs.getString(6)); 
+                 userRow.addElement(rs.getString(7)); 
+                 model.addRow(userRow);
+
+             }
+              stmt.close();
+              con.close();
+       }catch(Exception e) {
+          System.out.println(e.getMessage());
+          }
+   /////////////
+       try{
+    	   Class.forName("com.mysql.jdbc.Driver");
+	       con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
+           stmt = con.createStatement();
+           
+           rs = stmt.executeQuery("Select sum(wonsum) as inc_sum from "+username+" where inc_or_exp = 'income' and date like '"+month2+"/"+thisdate+"/"+calYear+"'");
+        while(rs.next()){
+          incsum = rs.getInt("inc_sum");
+          inc.setText("총수입: "+incsum+"원  ");
+          }
+      } catch(Exception e) {
+             System.out.println(e.getMessage());
+      }
+       
+       try{
+    	   Class.forName("com.mysql.jdbc.Driver");
+	       con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
+           stmt = con.createStatement();
+           rs = stmt.executeQuery("Select sum(wonsum) as exp_sum from "+username+" where inc_or_exp = 'expense' and date like '"+month2+"/"+thisdate+"/"+calYear+"'");
+        while(rs.next()){
+          expsum = rs.getInt("exp_sum");
+          exp.setText("총지출: "+expsum+"원   ");
+          }
+      } catch(Exception e) {
+             System.out.println(e.getMessage());
+      }
+       int all = incsum-expsum;
+       result.setText("총액: "+all+"원" );
+
+
+           
+    }
+
+    
    private class ThreadConrol extends Thread{
       public void run(){
          boolean msgCntFlag = false;
@@ -801,5 +1005,4 @@ public class MemoCalendar extends CalendarDataManager{
          }
       }
    }
-   
 }

@@ -16,7 +16,7 @@ public class InputExpense implements ActionListener{
    public static int year;
    public static int month;
    public static int date;
-   Input input;
+   MemoCalendar memocalendar;
     
    public void showMemo(){
     f.setVisible(false); // 테스트프레임 오픈
@@ -31,7 +31,7 @@ public class InputExpense implements ActionListener{
  public static void main(String[] args){
     SwingUtilities.invokeLater(new Runnable(){
        public void run(){
-          new Input(username, year, month, date);
+           new MemoCalendar(username);
        }
     });
  }
@@ -64,7 +64,7 @@ public class InputExpense implements ActionListener{
      expense.add("Family events");
      expense.add("Other");
      
-     expense.setSize(300, 200);
+     expense.setSize(150, 150);
      expense.setLocation(500, 300);
      
   
@@ -223,7 +223,7 @@ public class InputExpense implements ActionListener{
 
      p3.add(detailBut,BorderLayout.SOUTH);
      
-     f.setSize(600, 600);
+     f.setSize(500, 400);
      f.setVisible(true);
      }
 

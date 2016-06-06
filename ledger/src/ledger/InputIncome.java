@@ -63,7 +63,7 @@ public class InputIncome implements ActionListener {
       income.add("Balance from last month");
       income.add("Other");
       
-      income.setSize(300, 200);
+      income.setSize(150, 150);
       income.setLocation(500, 300);
       
    
@@ -256,7 +256,7 @@ public class InputIncome implements ActionListener {
 
    //   p3.add(detailBut);
       
-      f.setSize(600, 600);
+      f.setSize(500, 400);
 
       f.setVisible(true);
    }
