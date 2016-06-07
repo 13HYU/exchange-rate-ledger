@@ -22,70 +22,70 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class Category extends JFrame{
-	public static String username;
-	public int year;
-	public int month;
-	
-	Connection con;
-	Statement stmt;
-	ResultSet rs = null;
-	   
-	public void showMemo(){
-	       cateFrame.setVisible(false); // 테스트프레임 오픈
-	    }  
-	
-	JFrame cateFrame;
-	
-	JPanel AllP;
-	
-	JPanel MMYY;
-	JButton Pyear;
-	JButton Pmonth;
-	JLabel curMY;
-	JButton Nmonth;
-	JButton Nyear;
-	
-	JPanel Inc_Exp_P;
-	
-	JPanel IncomeP;
-	JPanel IncomeCateP;
-	JPanel IncomeResultP;
-	JLabel IncomeCate[];
-	JLabel IncomeResult[];
-	JPanel IncomeGraphP;
-	//그래프추가
-	
-	JPanel ExpenseP;
-	JPanel ExpenseCateP;
-	JPanel ExpenseResultP;
-	JLabel ExpenseCate[];
-	JLabel ExpenseResult[];
-	JPanel ExpenseGraphP;
-	//그래프추가
-	
-	JPanel BottomP;
-	JButton CloseBut;
-	
-	final String title = "메모 달력 ver 1.0";
-	
-	public static void main(String[] args){
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				new MemoCalendar(username);
-				}
-			});
-		}
-	
-	public Category(String u, int y, int m) {
-		this.username = u;
-		this.year = y;
-		this.month = m+1;  
-		
-		cateFrame = new JFrame(title);
-	    cateFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    cateFrame.setSize(700,700);
-	    cateFrame.setLocationRelativeTo(null);
-	    cateFrame.setResizable(false);
+   public static String username;
+   public int year;
+   public int month;
+   
+   Connection con;
+   Statement stmt;
+   ResultSet rs = null;
+      
+   public void showMemo(){
+          cateFrame.setVisible(false); // 테스트프레임 오픈
+       }  
+   
+   JFrame cateFrame;
+   
+   JPanel AllP;
+   
+   JPanel MMYY;
+   JButton Pyear;
+   JButton Pmonth;
+   JLabel curMY;
+   JButton Nmonth;
+   JButton Nyear;
+   
+   JPanel Inc_Exp_P;
+   
+   JPanel IncomeP;
+   JPanel IncomeCateP;
+   JPanel IncomeResultP;
+   JLabel IncomeCate[];
+   JLabel IncomeResult[];
+   JPanel IncomeGraphP;
+   //그래프추가
+   
+   JPanel ExpenseP;
+   JPanel ExpenseCateP;
+   JPanel ExpenseResultP;
+   JLabel ExpenseCate[];
+   JLabel ExpenseResult[];
+   JPanel ExpenseGraphP;
+   //그래프추가
+   
+   JPanel BottomP;
+   JButton CloseBut;
+   
+   final String title = "메모 달력 ver 1.0";
+   
+   public static void main(String[] args){
+      SwingUtilities.invokeLater(new Runnable(){
+         public void run(){
+            new MemoCalendar(username);
+            }
+         });
+      }
+   
+   public Category(String u, int y, int m) {
+      this.username = u;
+      this.year = y;
+      this.month = m+1;  
+      
+      cateFrame = new JFrame(title);
+       cateFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       cateFrame.setSize(700,700);
+       cateFrame.setLocationRelativeTo(null);
+       cateFrame.setResizable(false);
         
         MMYY = new JPanel();
         curMY = new JLabel("<html><table width=100><tr><th><font size=5>"+month+"/"+year+"</th></tr></table></html>");
@@ -158,11 +158,11 @@ public class Category extends JFrame{
         IncomeCate = new JLabel[4];
                 
         for(int i=0; i<4; i++){
-        	IncomeCate[i] = new JLabel();
-        	IncomeCate[i].setOpaque(true);
-        	IncomeCate[i].setBackground(new Color(150, 150, 150));    
-        	
-        	IncomeCateP.add(IncomeCate[i]);
+           IncomeCate[i] = new JLabel();
+           IncomeCate[i].setOpaque(true);
+           IncomeCate[i].setBackground(new Color(150, 150, 150));    
+           
+           IncomeCateP.add(IncomeCate[i]);
         }
         
         IncomeCate[0].setText("<html><table width=100><tr><th><font size=4><font color=white>Salary</font></th></tr></table></html>");
@@ -173,11 +173,11 @@ public class Category extends JFrame{
         IncomeResult = new JLabel[4];
         
         for(int i=0; i<4; i++){
-        	IncomeResult[i] = new JLabel();
-        	IncomeResult[i].setOpaque(true);
-        	IncomeResult[i].setBackground(Color.white);
+           IncomeResult[i] = new JLabel();
+           IncomeResult[i].setOpaque(true);
+           IncomeResult[i].setBackground(Color.white);
 
-        	IncomeResultP.add(IncomeResult[i]);
+           IncomeResultP.add(IncomeResult[i]);
         }
         
         
@@ -208,11 +208,11 @@ public class Category extends JFrame{
         ExpenseCate = new JLabel[9];
                 
         for(int i=0; i<9; i++){
-        	ExpenseCate[i] = new JLabel();
-        	ExpenseCate[i].setOpaque(true);
-        	ExpenseCate[i].setBackground(new Color(150, 150, 150));    
-        	
-        	ExpenseCateP.add(ExpenseCate[i]);
+           ExpenseCate[i] = new JLabel();
+           ExpenseCate[i].setOpaque(true);
+           ExpenseCate[i].setBackground(new Color(150, 150, 150));    
+           
+           ExpenseCateP.add(ExpenseCate[i]);
         }
         
         ExpenseCate[0].setText("<html><table width=100><tr><th><font size=4><font color=white>Food</font></th></tr></table></html>");
@@ -228,11 +228,11 @@ public class Category extends JFrame{
         ExpenseResult = new JLabel[9];
         
         for(int i=0; i<9; i++){
-        	ExpenseResult[i] = new JLabel();
-        	ExpenseResult[i].setOpaque(true);
-        	ExpenseResult[i].setBackground(Color.white);
+           ExpenseResult[i] = new JLabel();
+           ExpenseResult[i].setOpaque(true);
+           ExpenseResult[i].setBackground(Color.white);
 
-        	ExpenseResultP.add(ExpenseResult[i]);
+           ExpenseResultP.add(ExpenseResult[i]);
         }
         
          //showResult();
@@ -267,62 +267,62 @@ public class Category extends JFrame{
         
         cateFrame.add(AllP);
         cateFrame.setVisible(true);
-		}
-	
-	 private void showResult(){
-	      try{
-	            Class.forName("com.mysql.jdbc.Driver");
-	            //System.out.println("mysql 로딩완료");
-	            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
-	            //System.out.println("데이터베이스 연결 성공");
-	            stmt = con.createStatement();
-	            String categ;
-	            for(int i=0;i<4;i++){
-	            	
-					if(i == 0){categ = "Salary"; }			
-					else if(i == 1) { categ = "Allowance"; }
-				    else if(i == 2) { categ = "Balance from last month"; }
-				    else {categ = "Other";}
-					String sql = "Select category, sum(wonsum) as catesum from "+username+" where inc_or_exp = 'income' and date like '"+month+"/%/"+year+"' and category = '"+categ+"'";
-	                rs = stmt.executeQuery(sql);
-					while(rs.next()){
-						 	IncomeResult[i].setText("<html><table width=100><tr><th><font size=4><font color=black>"+rs.getInt("catesum")+"KRW</font></th></tr></table></html>");
-					 }       		 
-					IncomeResult[i].removeAll();
-	            }
-	            for(int i=0;i<9;i++){
-					if(i == 0){ categ = "Food"; }
-					else if(i == 1) { categ = "Transportation"; }
-					else if(i == 2) { categ = "Residence fee"; }
-					else if(i == 3) { categ = "Clothing"; }
-					else if(i == 4) { categ = "Telecommunication"; }
-					else if(i == 5) { categ = "Education"; }
-					else if(i == 6) { categ = "Culture"; }
-					else if(i == 7) { categ = "Family events"; }
-				    else { categ = "Others"; }
-					String sql2 = "Select category, sum(wonsum) as catesum from "+username+" where inc_or_exp = 'expense' and date like '"+month+"/%/"+year+"' and category = '"+categ+"'";
-		            rs = stmt.executeQuery(sql2);
-					while(rs.next()){
-						ExpenseResult[i].setText("<html><table width=100><tr><th><font size=4><font color=black>"+rs.getInt("catesum")+"KRW</font></th></tr></table></html>");
-					}
-					ExpenseResult[i].removeAll();
-				}            
-	            rs.close();
-	            stmt.close();
-	            con.close();
-	      }
-	      catch(ClassNotFoundException ex1){
-	          System.out.println("mysql드라이버 찾을 수 없음");
-	          }
-	       catch(SQLException ex2){
-	          System.out.println("sql 실패");
-	          }
-	       catch(Exception ex3){
-	          System.out.println(ex3.toString());
-	          }
-	       finally{
-	          //System.out.println("DB연결 성공!");
-	       }
-	   }
-	
+      }
+   
+    private void showResult(){
+         try{
+               Class.forName("com.mysql.jdbc.Driver");
+               //System.out.println("mysql 로딩완료");
+               con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
+               //System.out.println("데이터베이스 연결 성공");
+               stmt = con.createStatement();
+               String categ;
+               for(int i=0;i<4;i++){
+                  
+               if(i == 0){categ = "Salary"; }         
+               else if(i == 1) { categ = "Allowance"; }
+                else if(i == 2) { categ = "Balance from last month"; }
+                else {categ = "Other";}
+               String sql = "Select category, sum(wonsum) as catesum from "+username+" where inc_or_exp = 'income' and date like '"+month+"/%/"+year+"' and category = '"+categ+"'";
+                   rs = stmt.executeQuery(sql);
+               while(rs.next()){
+                      IncomeResult[i].setText("<html><table width=100><tr><th><font size=4><font color=black>"+rs.getInt("catesum")+"KRW</font></th></tr></table></html>");
+                }              
+               IncomeResult[i].removeAll();
+               }
+               for(int i=0;i<9;i++){
+               if(i == 0){ categ = "Food"; }
+               else if(i == 1) { categ = "Transportation"; }
+               else if(i == 2) { categ = "Residence fee"; }
+               else if(i == 3) { categ = "Clothing"; }
+               else if(i == 4) { categ = "Telecommunication"; }
+               else if(i == 5) { categ = "Education"; }
+               else if(i == 6) { categ = "Culture"; }
+               else if(i == 7) { categ = "Family events"; }
+                else { categ = "Others"; }
+               String sql2 = "Select category, sum(wonsum) as catesum from "+username+" where inc_or_exp = 'expense' and date like '"+month+"/%/"+year+"' and category = '"+categ+"'";
+                  rs = stmt.executeQuery(sql2);
+               while(rs.next()){
+                  ExpenseResult[i].setText("<html><table width=100><tr><th><font size=4><font color=black>"+rs.getInt("catesum")+"KRW</font></th></tr></table></html>");
+               }
+               ExpenseResult[i].removeAll();
+            }            
+               rs.close();
+               stmt.close();
+               con.close();
+         }
+         catch(ClassNotFoundException ex1){
+             System.out.println("mysql드라이버 찾을 수 없음");
+             }
+          catch(SQLException ex2){
+             System.out.println("sql 실패");
+             }
+          catch(Exception ex3){
+             System.out.println(ex3.toString());
+             }
+          finally{
+             //System.out.println("DB연결 성공!");
+          }
+      }
+   
 }
