@@ -11,6 +11,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.util.*;
+import org.jdatepicker.impl.*;
+
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 //환율
 public class Excel extends JFrame {
 	public static String username;
@@ -27,17 +34,24 @@ public class Excel extends JFrame {
     String sy2;
     JButton search; 
     JLabel range = new JLabel("~");
-    JTextField mf;
-    JTextField df;
-    JTextField yf;
-    JTextField mf2;
-    JTextField df2;
-    JTextField yf2;
+    
     String inc;
     String exp;
     float Sum;
+    String [] strArr;
+    
+
+    UtilDateModel model2;
+    UtilDateModel model3;
+    JDatePanelImpl datePanel;
+    JDatePickerImpl datePicker;
+    JDatePanelImpl datePanel2;
+    JDatePickerImpl datePicker2;
 
     JFileChooser jfc = new JFileChooser();
+    
+    
+	
 
     
    public void showMemo(){
@@ -64,16 +78,34 @@ public class Excel extends JFrame {
       main1Frame.setResizable(false);
       
       JPanel allp = new JPanel();
-      
+      JLabel range = new JLabel("~");
+      model2 = new UtilDateModel();
+      //model.setDate(20,04,2014);
+      Properties p = new Properties();
+      p.put("text.today", "Today");
+      p.put("text.month", "Month");
+      p.put("text.year", "Year");
       JPanel datep = new JPanel();
-      datep.setBorder(BorderFactory.createTitledBorder("저장을 월하는 날짜의 범위를 입력해주세요."));
+      datep.setBorder(BorderFactory.createTitledBorder("저장을 월하는 날짜의 범위를 선택해주세요."));
+      datePanel = new JDatePanelImpl(model2, p);
+      datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+      
+      model3 = new UtilDateModel();
+      datePanel2 = new JDatePanelImpl(model3, p);
+      datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+      datep.add(datePicker);
+      datep.add(range);
+      datep.add(datePicker2);
+      
+      
+      /*
       JLabel M = new JLabel("M:");
       JLabel D = new JLabel("D:");
       JLabel Y = new JLabel("Y:");
       JLabel M2 = new JLabel("M:");
       JLabel D2 = new JLabel("D:");
       JLabel Y2 = new JLabel("Y:");
-      JLabel range = new JLabel("~");
+      
       mf = new JTextField(3);
       df = new JTextField(3);
       yf = new JTextField(5);
@@ -88,14 +120,14 @@ public class Excel extends JFrame {
       datep.add(df);
       datep.add(Y);
       datep.add(yf);
-      datep.add(range);
+      
       datep.add(M2);
       datep.add(mf2);
       datep.add(D2);
       datep.add(df2);
       datep.add(Y2);
       datep.add(yf2);
-      
+      */
       JPanel savep = new JPanel();
       JLabel want = new JLabel("저장 위치: ");
       JLabel jlb = new JLabel();      
@@ -125,14 +157,14 @@ public class Excel extends JFrame {
       savep.add(search);
       
       JPanel bottomp = new JPanel();
-      JButton savebut = new JButton("저장");
+      JButton savebut = new JButton("save");
       savebut.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
               saveexcel();
           }
       });
-      JButton cancelbut = new JButton("취소");
+      JButton cancelbut = new JButton("cancel");
       cancelbut.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
@@ -151,7 +183,29 @@ public class Excel extends JFrame {
       main1Frame.setVisible(true);
    }
    
-   
+   public class DateLabelFormatter extends AbstractFormatter {
+	    
+
+	    String datePattern = "yyyy-MM-dd";
+	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+	    @Override
+	    public Object stringToValue(String text) throws ParseException {
+	        return dateFormatter.parseObject(text);
+	    }
+
+	    @Override
+	    public String valueToString(Object value) throws ParseException {
+	        if (value != null) {
+	            Calendar cal = (Calendar) value;
+	            return dateFormatter.format(cal.getTime());
+	        }
+
+	        return "";
+	    }
+
+	}
+
    public void saveexcel(){
 		 try{
 			 
@@ -161,12 +215,26 @@ public class Excel extends JFrame {
 			 String header = "date, inc_or_exp, category, details, rate, currency, sum, wonsum \r\n";
 			 writer.write(header);
 		      //filename = ""+mf.getText()+df.getText()+yf.getText()+"_"+mf2.getText()+df2.getText()+yf2.getText()+"";
-		      sm = mf.getText();
-		      sd = df.getText();
-		      sy = yf.getText();
-		      sm2 = mf2.getText();
-		      sd2 = df2.getText();
-		      sy2 = yf2.getText();
+			 String getdate = datePicker.getJFormattedTextField().getText();
+		     String parts[] = getdate.split("-");
+         	 sy = parts[0]; //year
+         	 sm = parts[1]; //month
+         	 strArr = sm.split("");
+         	 if (Integer.parseInt(strArr[0]) == 0){ sm = strArr[1];}
+         	 
+         	 sd = parts[2]; //day
+         	 strArr = sd.split("");
+         	 if (Integer.parseInt(strArr[0]) == 0){ sd = strArr[1];}
+         	 
+         	 String getdate2 = datePicker2.getJFormattedTextField().getText();
+		     String parts2[] = getdate2.split("-");
+        	 sy2 = parts2[0]; //year
+        	 sm2 = parts2[1]; //month
+        	 strArr = sm2.split("");
+         	 if (Integer.parseInt(strArr[0]) == 0){ sm2 = strArr[1];}
+        	 sd2 = parts2[2]; //day
+        	 strArr = sd2.split("");
+         	 if (Integer.parseInt(strArr[0]) == 0){ sd2 = strArr[1];}
 	         Class.forName("com.mysql.jdbc.Driver");
 	            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
 	            stmt = con.createStatement();

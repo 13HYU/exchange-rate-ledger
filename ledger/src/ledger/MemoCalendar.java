@@ -11,6 +11,12 @@ import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.*;
+import org.jdatepicker.impl.*;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 
 
 class CalendarDataManager{ // 6*7배열에 나타낼 달력 값을 구하는 class
@@ -25,7 +31,7 @@ class CalendarDataManager{ // 6*7배열에 나타낼 달력 값을 구하는 class
    Calendar today = Calendar.getInstance();
    Calendar cal;
    JMenuItem version, info, logout;
-
+  
    DefaultTableModel model;
 
    Vector<String> userCol = new Vector<String>();
@@ -33,6 +39,10 @@ class CalendarDataManager{ // 6*7배열에 나타낼 달력 값을 구하는 class
    JTable table1;
    
    int incsum, expsum;
+   
+   UtilDateModel model2;
+   JDatePanelImpl datePanel;
+   JDatePickerImpl datePicker;
    
    public CalendarDataManager(){ 
       setToday(); 
@@ -201,7 +211,7 @@ public class MemoCalendar extends CalendarDataManager{
       this.username = u;
       mainFrame = new JFrame(title);
       mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      mainFrame.setSize(1200,700);
+      mainFrame.setSize(1000,700);
       mainFrame.setLocationRelativeTo(null);
       mainFrame.setResizable(false);
       mainFrame.setIconImage(icon.getImage());
@@ -386,6 +396,19 @@ public class MemoCalendar extends CalendarDataManager{
             rateSub2Panel = new JPanel();
             
             RatedateP = new JPanel();
+           
+            model2 = new UtilDateModel();
+            //model.setDate(20,04,2014);
+            Properties p = new Properties();
+            p.put("text.today", "Today");
+            p.put("text.month", "Month");
+            p.put("text.year", "Year");
+            datePanel = new JDatePanelImpl(model2, p);
+            datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+
+    	   
+            RatedateP.add(datePicker);
+            /*
             Font font = new Font("arian", Font.BOLD, 20);
             RatedateY = new TextField(5);
             RatedateY.setFont(font);
@@ -399,18 +422,18 @@ public class MemoCalendar extends CalendarDataManager{
             Y = new JLabel("Y:");
             
             //RatedateP.setLayout(new BoxLayout(RatedateP, BoxLayout.X_AXIS));
-            RatedateP.setLayout(new FlowLayout());
+            RatedateP.setLayout(new FlowLayout());*/
             Dimension rateSize = RatedateP.getPreferredSize();
             rateSize.width = 300;
     
             RatedateP.setPreferredSize(rateSize);
-            RatedateP.add(M);
+    /*        RatedateP.add(M);
             RatedateP.add(RatedateM);
             RatedateP.add(D);
             RatedateP.add(RatedateD);
             RatedateP.add(Y);
             RatedateP.add(RatedateY);
-            
+      */      
             Curr = new Choice();
             Curr.add("USD");
             Curr.add("EUR");
@@ -432,21 +455,26 @@ public class MemoCalendar extends CalendarDataManager{
             Curr.add("SEK");
             Curr.add("DKK");
             
-            Resultrate = new JLabel("                               ");
+            Resultrate = new JLabel("");
             
             rateSub2Panel.setLayout(new BorderLayout());
-            rateSub2Panel.add(RatedateP, BorderLayout.WEST);
+            rateSub2Panel.add(RatedateP, BorderLayout.NORTH);
             rateSub2Panel.add(Curr, BorderLayout.CENTER);
-            rateSub2Panel.add(Resultrate, BorderLayout.EAST);
+            rateSub2Panel.add(Resultrate, BorderLayout.SOUTH);
             rateSubPanel=new JPanel();
             testBut = new JButton("환율 보기");
             testBut.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                	String getdate = datePicker.getJFormattedTextField().getText();
+					String parts[] = getdate.split("-");
+                	String p1 = parts[0]; //year
+                	String p2 = parts[1]; //month
+                	String p3 = parts[2]; //day
                 	String selectedcurr = Curr.getSelectedItem();
-                    UrlDownload urldownload = new UrlDownload(Integer.parseInt(RatedateY.getText()), Integer.parseInt(RatedateM.getText()), Integer.parseInt(RatedateD.getText()));
+                    UrlDownload urldownload = new UrlDownload(Integer.parseInt(p1), Integer.parseInt(p2), Integer.parseInt(p3));
               
-                    ExchangeRate exchangerate = new ExchangeRate(selectedcurr ,Integer.parseInt(RatedateY.getText()), Integer.parseInt(RatedateM.getText()), Integer.parseInt(RatedateD.getText()));
+                    ExchangeRate exchangerate = new ExchangeRate(selectedcurr ,Integer.parseInt(p1), Integer.parseInt(p2), Integer.parseInt(p3));
                     if(exchangerate.currency.equals("USD")){
                     	Resultrate.setText("<html><tr><th><font size=4>"+exchangerate.won + "원</th></tr></table></html>");
                     }
@@ -581,6 +609,7 @@ public class MemoCalendar extends CalendarDataManager{
                  DefaultTableModel model = (DefaultTableModel)table1.getModel();
                  model.setNumRows(0);
                   select();   
+                  showState();
               }
           });
           
@@ -656,6 +685,7 @@ public class MemoCalendar extends CalendarDataManager{
            btn1.setForeground(new Color(50, 100, 200));
            
           JButton btn2 = new JButton("Expense");
+          
           btn2.setPreferredSize(new Dimension(120, 50)); 
 //          btn2.setBackground(new Color(50, 100, 200));
            btn2.setForeground(new Color(50, 100, 200));
@@ -666,15 +696,15 @@ public class MemoCalendar extends CalendarDataManager{
 
                 }
             });
-           
+
            JButton btn3 = new JButton("Delete");
            btn3.setPreferredSize(new Dimension(120, 50));
            btn3.setForeground(new Color(50, 100, 200));
            btn3.addActionListener(new ActionListener() {
                @Override
                public void actionPerformed(ActionEvent e) {
-            	   int selection = table1.getSelectedRow();
-            	   try{
+                  int selection = table1.getSelectedRow();
+                  try{
                        Class.forName("com.mysql.jdbc.Driver");
                        System.out.println("mysql 로딩완료");
                        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
@@ -684,13 +714,14 @@ public class MemoCalendar extends CalendarDataManager{
                        String query = "delete from "+username+" where date= '"+(String) model.getValueAt(selection, 0)+"' and category= '"+(String) model.getValueAt(selection, 2)+"' and details='"+(String) model.getValueAt(selection,3)+"'";
                        stmt.executeUpdate(query); 
 
-            	   } catch (Exception eeee) {eeee.getMessage();
-            	   } finally{
-            		   System.out.println("DB연결 성공!");
-                   	   model.removeRow(selection);
-                	   table1.updateUI();
-                	   }
-            	   }
+                  } catch (Exception eeee) {eeee.getMessage();
+                  } finally{
+                     System.out.println("DB연결 성공!");
+                         model.removeRow(selection);
+                         table1.updateUI();
+                         showState();
+                      }
+                  }
                }
            );
 
@@ -988,10 +1019,31 @@ public class MemoCalendar extends CalendarDataManager{
        result.setText("총액: "+all+"원" );
 
 
-          
+           
     }
+   public class DateLabelFormatter extends AbstractFormatter {
+	    
 
-   
+	    String datePattern = "yyyy-MM-dd";
+	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+	    @Override
+	    public Object stringToValue(String text) throws ParseException {
+	        return dateFormatter.parseObject(text);
+	    }
+
+	    @Override
+	    public String valueToString(Object value) throws ParseException {
+	        if (value != null) {
+	            Calendar cal = (Calendar) value;
+	            return dateFormatter.format(cal.getTime());
+	        }
+
+	        return "";
+	    }
+
+	}
+
    private class ThreadConrol extends Thread{
       public void run(){
          boolean msgCntFlag = false;
