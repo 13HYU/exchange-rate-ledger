@@ -664,15 +664,41 @@ public class MemoCalendar extends CalendarDataManager{
                 public void actionPerformed(ActionEvent e) {
                      InputExpense input = new InputExpense(username, thisyear, thismonth, thisdate);
 
-      //             getContentPane().removeAll();
-       //             getContentPane().add(input2);
-        //            revalidate();
-         //           repaint();
                 }
             });
+           
+           JButton btn3 = new JButton("Delete");
+           btn3.setPreferredSize(new Dimension(120, 50));
+           btn3.setForeground(new Color(50, 100, 200));
+           btn3.addActionListener(new ActionListener() {
+               @Override
+               public void actionPerformed(ActionEvent e) {
+            	   int selection = table1.getSelectedRow();
+            	   try{
+                       Class.forName("com.mysql.jdbc.Driver");
+                       System.out.println("mysql 로딩완료");
+                       con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
+                       System.out.println("데이터베이스 연결 성공");
+                       stmt = con.createStatement();
+
+                       String query = "delete from "+username+" where date= '"+(String) model.getValueAt(selection, 0)+"' and category= '"+(String) model.getValueAt(selection, 2)+"' and details='"+(String) model.getValueAt(selection,3)+"'";
+                       stmt.executeUpdate(query); 
+
+            	   } catch (Exception eeee) {eeee.getMessage();
+            	   } finally{
+            		   System.out.println("DB연결 성공!");
+                   	   model.removeRow(selection);
+                	   table1.updateUI();
+                	   }
+            	   }
+               }
+           );
+
+           
 
           p2.add(btn1);
           p2.add(btn2);
+          p2.add(btn3);
           
           f.setLayout(new BorderLayout());
           f.add(p0, BorderLayout.NORTH);
@@ -962,10 +988,10 @@ public class MemoCalendar extends CalendarDataManager{
        result.setText("총액: "+all+"원" );
 
 
-           
+          
     }
 
-    
+   
    private class ThreadConrol extends Thread{
       public void run(){
          boolean msgCntFlag = false;
