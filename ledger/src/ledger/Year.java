@@ -44,7 +44,7 @@ public class Year extends JFrame {
    JButton detailBut; 
    JButton testBut;
    
-   final String title = "메모 달력 ver 1.0";
+   final String title = "Rate ledger ver 1.0";
    
    public static void main(String[] args){
       SwingUtilities.invokeLater(new Runnable(){
@@ -67,11 +67,11 @@ public class Year extends JFrame {
       main1Frame.setResizable(false);
       
       ratePanel=new JPanel();
-        ratePanel.setBorder(BorderFactory.createTitledBorder("일년내역"));        
+        ratePanel.setBorder(BorderFactory.createTitledBorder("Annual View"));        
 
         rateSubPanel=new JPanel();        
-        testBut = new JButton("테스트");
-        detailBut = new JButton("main page로 돌아가기");
+        testBut = new JButton("Test");
+        detailBut = new JButton("Back to main page");
         detailBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

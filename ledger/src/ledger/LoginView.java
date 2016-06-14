@@ -6,11 +6,13 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,6 +32,9 @@ public class LoginView implements ActionListener{
  Statement stmt;
  ResultSet rs;
 
+ ImageIcon icon = new ImageIcon ( Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
+ 
+ 
  public LoginView(){}
  
  public Container login_panel(){
@@ -58,7 +63,7 @@ public class LoginView implements ActionListener{
   panel.add(blank_layout);
  
   
-  JButton btnInit = new JButton("다시 입력");
+  JButton btnInit = new JButton("Reset");
   btnInit.setBounds(10, 80, 100, 25);
   //panel.add(btnInit);
   btnInit.addActionListener(new ActionListener() {
@@ -70,7 +75,7 @@ public class LoginView implements ActionListener{
   });
   
   
-  JButton login_submit = new JButton("로그인");
+  JButton login_submit = new JButton("Login");
   login_submit.setBounds(10, 80, 100, 25);
   login_submit.addActionListener(new ActionListener() {
       @Override
@@ -81,6 +86,7 @@ public class LoginView implements ActionListener{
           password = passText.getText();
           String result;
           try{
+           CreateDatabase create_db = new CreateDatabase();
             Class.forName("com.mysql.jdbc.Driver");
             System.out.println("mysql 로딩완료");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
@@ -89,11 +95,11 @@ public class LoginView implements ActionListener{
             String sql = "select fullname from account where username ='"+username+"' and password='"+password+"'";
             rs = stmt.executeQuery(sql);
             if(!rs.next())
-              JOptionPane.showMessageDialog(null, "패스워드 틀렸습니다","로그인 실패", JOptionPane.PLAIN_MESSAGE);
+              JOptionPane.showMessageDialog(null, "You entered wrong password","Log in failure", JOptionPane.PLAIN_MESSAGE);
             else{
                result = rs.getString("fullname");
                if(result!="")
-                  JOptionPane.showMessageDialog(null, "메인화면으로 이동합니다","로그인 성공", JOptionPane.PLAIN_MESSAGE);
+                  JOptionPane.showMessageDialog(null, "Move on to Main Page","Log in Success", JOptionPane.PLAIN_MESSAGE);
                   userText.setText("");
                   passText.setText("");
                   frame.setVisible(false);
@@ -141,7 +147,7 @@ public class LoginView implements ActionListener{
       {
          System.out.println("Clicked on Label...");
          try {
-        	  Username_loss username_loss = new Username_loss();
+             Username_loss username_loss = new Username_loss();
               //username_loss.setPage(new URL(strURL));
            }
            catch(Exception e) {
@@ -162,7 +168,7 @@ public class LoginView implements ActionListener{
       {
          System.out.println("Clicked on Label...");
          try {
-        	 Password_loss password_loss = new Password_loss("smtp.gmail.com");
+            Password_loss password_loss = new Password_loss("smtp.gmail.com");
               //username_loss.setPage(new URL(strURL));
            }
            catch(Exception e) {
@@ -209,13 +215,14 @@ public class LoginView implements ActionListener{
   userText.setColumns(15);
   panel.add(userText);
 
-  JButton duplicate = new JButton("중복검사");
+  JButton duplicate = new JButton("Check");
   panel.add(duplicate);
   duplicate.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-    	 String username = userText.getText();
-    	 try{
+        String username = userText.getText();
+        try{
+             CreateDatabase create_db = new CreateDatabase();
              Class.forName("com.mysql.jdbc.Driver");
              System.out.println("mysql 로딩완료");
              con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
@@ -225,11 +232,11 @@ public class LoginView implements ActionListener{
              rs = stmt.executeQuery(sql);
              
              if(rs.next()){
-            	JOptionPane.showMessageDialog(null, "사용할 수 없는 username입니다","중복 username 사용", JOptionPane.PLAIN_MESSAGE);
-            	userText.setText("");
+               JOptionPane.showMessageDialog(null, "Unable to use the username","Already used username", JOptionPane.PLAIN_MESSAGE);
+               userText.setText("");
              }
             else
-            	JOptionPane.showMessageDialog(null, "사용 가능한 username입니다","username 사용가능", JOptionPane.PLAIN_MESSAGE);   
+               JOptionPane.showMessageDialog(null, "Able to use the username","Available username", JOptionPane.PLAIN_MESSAGE);   
           }
           
           catch(ClassNotFoundException ex1){
@@ -275,13 +282,13 @@ public class LoginView implements ActionListener{
   panel.add(emailText);
   
   String[] questionlist = {
-        "좋아하는 색깔은 무엇입니까?",
-        "중학교 1학년 담임선생님 이름은?",
-        "내 애완동물 이름은?",
-        "감명깊게 읽은 책은?",
-        "어머니 이름은 무엇입니까?",
-        "아버지 이름은 무엇입니까?",
-        "태어난 고향은 어디입니까?"
+          "What's your favorite color?",
+          "What's the name of your middle-school teacher?",
+          "What's the name of your pet?",
+          "What's the name of the most impressive book?",
+          "What's your mother's name?",
+          "Whta's your father's name?",
+          "Where were you born?"
   };
   
   
@@ -303,7 +310,7 @@ public class LoginView implements ActionListener{
   answerText.setBounds(100, 40, 160, 25);
   panel.add(answerText);
   
-  JButton btnInit = new JButton("다시 입력");
+  JButton btnInit = new JButton("Reset");
   btnInit.setBounds(10, 80, 100, 25);
   panel.add(btnInit);
   
@@ -320,7 +327,7 @@ public class LoginView implements ActionListener{
   });
   
   
-  JButton submit = new JButton("가입");
+  JButton submit = new JButton("Sign up");
   btnInit.setBounds(10, 80, 100, 25);
   panel.add(submit);
   
@@ -345,17 +352,17 @@ public class LoginView implements ActionListener{
          answer = answerText.getText();
           
           if(!password.equals(repassword)){
-        	  JOptionPane.showMessageDialog(null, "비밀번호를 다시 입력해주십시오","비밀번호가 다릅니다", JOptionPane.PLAIN_MESSAGE);
-        	  passText.setText("");
-        	  repassText.setText("");
-        	  passText.hasFocus();
+             JOptionPane.showMessageDialog(null, "Enter your password again","Passwords didn't match", JOptionPane.PLAIN_MESSAGE);
+             passText.setText("");
+             repassText.setText("");
+             passText.hasFocus();
           }
           
           if(fullname.equals("")||username.equals("")||password.equals("")||repassword.equals("")||email.equals("")||answer.equals("")){
-        	  JOptionPane.showMessageDialog(null, "빈 칸을 모두 채워주십시오","빈 칸", JOptionPane.PLAIN_MESSAGE);
+             JOptionPane.showMessageDialog(null, "Fill all the blanks","Null", JOptionPane.PLAIN_MESSAGE);
 
           }
-        	  
+             
           
           
           try{
@@ -378,7 +385,7 @@ public class LoginView implements ActionListener{
                stmt.executeUpdate(sql3);
                
                
-               JOptionPane.showMessageDialog(null, "회원가입 성공!!","회원가입성공", JOptionPane.PLAIN_MESSAGE);
+               JOptionPane.showMessageDialog(null, "Sign Up Succeeded!!","Success", JOptionPane.PLAIN_MESSAGE);
                
             }
             
@@ -423,9 +430,9 @@ public class LoginView implements ActionListener{
   
   
   
-  button_login = new JButton("로그인 화면");
+  button_login = new JButton("Log in");
   // button_login.setBounds(10, 80, 100, 25);
-  button_signup = new JButton("새 계정");
+  button_signup = new JButton("New Accounts");
   //button_signup.setBounds(10, 80, 100, 25);
   //button_forgot = new JButton("아이디/비밀번호 분실");
   //button_forgot.setBounds(10, 80, 100, 25);
@@ -441,7 +448,7 @@ public class LoginView implements ActionListener{
   
   return panel;
  }
- JFrame frame= new JFrame("로그인");
+ JFrame frame= new JFrame("Log in");
  public void createFrame(){
   
   frame.setSize(350, 450);
@@ -450,6 +457,7 @@ public class LoginView implements ActionListener{
   frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   frame.add(makeCardLayout());
   frame.setVisible(true);
+  frame.setIconImage(icon.getImage());
  }
  
  @Override

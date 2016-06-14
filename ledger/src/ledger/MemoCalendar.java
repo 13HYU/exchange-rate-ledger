@@ -197,7 +197,7 @@ public class MemoCalendar extends CalendarDataManager{
                      JOptionPane.showMessageDialog(null, "Ledger Version v.01", "Version", JOptionPane.INFORMATION_MESSAGE);
                     
               } else if (obj == info) {
-                  JOptionPane.showMessageDialog(null, "Made by students of Hanyang univ. \n As a Software Engineering course    project", "Info", JOptionPane.INFORMATION_MESSAGE);
+                  JOptionPane.showMessageDialog(null, "Made by students of Hanyang univ. \n As a Software Engineering course project", "Info", JOptionPane.INFORMATION_MESSAGE);
 
               } else if (obj == logout) {
                  mainFrame.dispose();
@@ -221,12 +221,11 @@ public class MemoCalendar extends CalendarDataManager{
       }catch(Exception e){
          bottomInfo.setText("ERROR : LookAndFeel setting failed");
       }
-      logout = new JMenuItem("로그아웃");
-      version = new JMenuItem("버전");
-      info = new JMenuItem("정보");
+      logout = new JMenuItem("Logout");
+      version = new JMenuItem("Version");
+      info = new JMenuItem("Info");
       
-      //fileMenu.add(new JMenuItem("환경설정"));
-      fileMenu.add(logout);
+       fileMenu.add(logout);
       helpMenu.add(version);
       helpMenu.add(info);
       
@@ -234,7 +233,7 @@ public class MemoCalendar extends CalendarDataManager{
       info.addActionListener(action);
       logout.addActionListener(action);
       
-      JMenuItem settings = new JMenuItem("환경설정");
+      JMenuItem settings = new JMenuItem("User Preferences");
       fileMenu.add(settings);
       settings.addActionListener(new ActionListener(){
     	  @Override
@@ -244,7 +243,7 @@ public class MemoCalendar extends CalendarDataManager{
       });
       
       
-      JMenuItem excelfile = new JMenuItem("엑셀로 저장하기");
+      JMenuItem excelfile = new JMenuItem("Save as Excel files");
       fileMenu.add(excelfile);
       excelfile.addActionListener(new ActionListener() {
           @Override
@@ -408,32 +407,11 @@ public class MemoCalendar extends CalendarDataManager{
 
     	   
             RatedateP.add(datePicker);
-            /*
-            Font font = new Font("arian", Font.BOLD, 20);
-            RatedateY = new TextField(5);
-            RatedateY.setFont(font);
-            RatedateM  = new TextField(2);
-            RatedateM.setFont(font);
-            RatedateD  = new TextField(2);
-            RatedateD.setFont(font);
-            
-            M = new JLabel("M:");
-            D = new JLabel("D:");
-            Y = new JLabel("Y:");
-            
-            //RatedateP.setLayout(new BoxLayout(RatedateP, BoxLayout.X_AXIS));
-            RatedateP.setLayout(new FlowLayout());*/
+  
             Dimension rateSize = RatedateP.getPreferredSize();
             rateSize.width = 300;
     
             RatedateP.setPreferredSize(rateSize);
-    /*        RatedateP.add(M);
-            RatedateP.add(RatedateM);
-            RatedateP.add(D);
-            RatedateP.add(RatedateD);
-            RatedateP.add(Y);
-            RatedateP.add(RatedateY);
-      */      
             Curr = new Choice();
             Curr.add("USD");
             Curr.add("EUR");
@@ -462,7 +440,7 @@ public class MemoCalendar extends CalendarDataManager{
             rateSub2Panel.add(Curr, BorderLayout.CENTER);
             rateSub2Panel.add(Resultrate, BorderLayout.SOUTH);
             rateSubPanel=new JPanel();
-            testBut = new JButton("환율 보기");
+            testBut = new JButton("Show");
             testBut.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -559,21 +537,21 @@ public class MemoCalendar extends CalendarDataManager{
            showState();
            JPanel Bottom = new JPanel();
            Bottom.setLayout(new FlowLayout());
-           JButton NEW = new JButton("Refresh");
+           JButton NEW = new JButton("Update");
            NEW.addActionListener(new ActionListener() {
                @Override
                public void actionPerformed(ActionEvent e) {
                    showState();
                }
            });
-           YearBUT = new JButton("일년보기");
+           YearBUT = new JButton("Annual view");
            YearBUT.addActionListener(new ActionListener() {			
                @Override
                public void actionPerformed(ActionEvent e) {
                    showYear();
                }
            });
-           CateBut = new JButton("분류별 보기");
+           CateBut = new JButton("By Category");
            CateBut.addActionListener(new ActionListener() {			
                @Override
                public void actionPerformed(ActionEvent e) {
@@ -602,7 +580,7 @@ public class MemoCalendar extends CalendarDataManager{
 
           
           todayLab2 = new JLabel(Integer.toString(calMonth+1)+"/"+calDayOfMon+"/"+calYear);
-          JButton New = new JButton("new");
+          JButton New = new JButton("Update");
           New.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
@@ -687,7 +665,6 @@ public class MemoCalendar extends CalendarDataManager{
           JButton btn2 = new JButton("Expense");
           
           btn2.setPreferredSize(new Dimension(120, 50)); 
-//          btn2.setBackground(new Color(50, 100, 200));
            btn2.setForeground(new Color(50, 100, 200));
            btn2.addActionListener(new ActionListener() {
                 @Override
@@ -997,7 +974,7 @@ public class MemoCalendar extends CalendarDataManager{
            rs = stmt.executeQuery("Select sum(wonsum) as inc_sum from "+username+" where inc_or_exp = 'income' and date like '"+month2+"/"+thisdate+"/"+calYear+"'");
         while(rs.next()){
           incsum = rs.getInt("inc_sum");
-          inc.setText("총수입: "+incsum+"원  ");
+          inc.setText("Income: "+incsum+"￦ ");
           }
       } catch(Exception e) {
              System.out.println(e.getMessage());
@@ -1010,13 +987,13 @@ public class MemoCalendar extends CalendarDataManager{
            rs = stmt.executeQuery("Select sum(wonsum) as exp_sum from "+username+" where inc_or_exp = 'expense' and date like '"+month2+"/"+thisdate+"/"+calYear+"'");
         while(rs.next()){
           expsum = rs.getInt("exp_sum");
-          exp.setText("총지출: "+expsum+"원   ");
+          exp.setText("Expense: "+expsum+"￦ ");
           }
       } catch(Exception e) {
              System.out.println(e.getMessage());
       }
        int all = incsum-expsum;
-       result.setText("총액: "+all+"원" );
+       result.setText("Sum: "+all+"￦" );
 
 
            

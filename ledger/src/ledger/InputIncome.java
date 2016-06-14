@@ -3,9 +3,6 @@ package ledger;
 import java.sql.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
 import javax.swing.*;
@@ -52,8 +49,6 @@ public class InputIncome implements ActionListener {
 
       Font font = new Font("SansSerif",Font.BOLD,40);
       todayLab.setFont(font);
-//      todayLab.setBounds(300, 50, 300, 500);      //왜 크기 조정이 안되지???
-
       
       JPanel p1 = new JPanel();
 
@@ -63,17 +58,13 @@ public class InputIncome implements ActionListener {
       income.add("Balance from last month");
       income.add("Other");
       
-      income.setSize(150, 150);
+      income.setSize(200, 150);
       income.setLocation(500, 300);
       
    
       JPanel p2 = new JPanel();
       
       Label lsum = new Label("Amount ", Label.RIGHT);
-//      Font font2 = new Font("SansSerif",Font.BOLD,15);
-//       lsum.setFont(font2);
-
-//      TextField tsum = new TextField(20);
       TextArea tsum= new TextArea("", 1,16,TextArea.SCROLLBARS_NONE);
       tsum.setEditable(true);
 
@@ -111,24 +102,14 @@ public class InputIncome implements ActionListener {
       ta.setEditable(true);
          //입력한 내용 반환
       JButton btn2 = new JButton("add");
-    //  btn2.setBackground(new Color(200, 50, 50));
-     // btn2.setForeground(Color.WHITE);
       btn2.addActionListener(new ActionListener(){
           @Override
           public void actionPerformed(ActionEvent e){
              System.out.println("입력된 돈은 "+tsum.getText()+", 단위는 "+ currency.getSelectedItem()+" 가(이) 입력되었습니다.");
              System.out.println("카테고리는 "+income.getSelectedItem()+"가(이) 선택되었습니다.");
              System.out.println("세부사항으로는 "+ta.getText()+" 가(이) 입력되었습니다.");
-
+             
              try{
-     			/*String csvFileName = "c:/ledger/"+username+".csv";
-    			
-    			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(csvFileName)));
-    			 String detail = rs.getString(1)+ "," + rs.getString(2)+ "," + rs.getString(3) + "\r\n";
-				  writer.write(detail);
-				  
-		  writer.close();      csv를 회원가입할때 만들어지도록 하고, 여기서 그 파일을 열고 이어서 쓴다. default속성정하는방법.
-		  날짜순으로 자동 정렬해서 저장하게 하기-사실 그냥 엑셀에서 뭐 하면되니까..이거까지는 뭐.. 그냥 둬두..  나중에 생각하기. */
                  Class.forName("com.mysql.jdbc.Driver");
                  System.out.println("mysql 로딩완료");
                  con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db","root","0zero6six");
@@ -182,14 +163,10 @@ public class InputIncome implements ActionListener {
       
 
       
-//      p0.setLayout(new GridBagLayout());
       p1.setLayout(new GridBagLayout());
       p2.setLayout(new GridBagLayout());
-//      p3.setLayout(new GridBagLayout());
       p3.setLayout(new BorderLayout(10,10));
-      
-  //    Label null2 = new Label("  ");
-  //    p3.add(null2,BorderLayout.SOUTH);
+
       JLabel memo = new JLabel("Memo/Notes", Label.LEFT);
       p3.add(memo, BorderLayout.WEST);
       p3.add(ta, BorderLayout.CENTER);
@@ -228,21 +205,8 @@ public class InputIncome implements ActionListener {
       calOpGC.gridy = 3;
       p2.add(currency,calOpGC);
       
-/*      
-      calOpGC.gridx = 1;
-      calOpGC.gridy = 4;
-      JLabel memo = new JLabel("Memo/Notes", Label.LEFT);
-      
-//      p3.add( new Label("Memo/Notes", Label.LEFT),"North");
-      p3.add(memo, calOpGC);
-      calOpGC.weightx = 1;
-      calOpGC.gridx = 2;
-      p3.add(ta,calOpGC);
-      calOpGC.gridx = 3;
-      p3.add(btn2,calOpGC);
-*/    
-      
-      detailBut = new JButton("input page로 돌아가기");
+     
+      detailBut = new JButton("Back to input page");
 
       detailBut.addActionListener(new ActionListener() {
           @Override
@@ -253,10 +217,8 @@ public class InputIncome implements ActionListener {
       detailBut.setBackground(new Color(200, 50, 50));
 
       p3.add(detailBut,BorderLayout.SOUTH);
-
-   //   p3.add(detailBut);
       
-      f.setSize(500, 400);
+      f.setSize(600, 400);
 
       f.setVisible(true);
    }

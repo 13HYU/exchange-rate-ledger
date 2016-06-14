@@ -64,7 +64,7 @@ public class InputExpense implements ActionListener{
      expense.add("Family events");
      expense.add("Other");
      
-     expense.setSize(150, 150);
+     expense.setSize(200, 150);
      expense.setLocation(500, 300);
      
   
@@ -144,7 +144,6 @@ public class InputExpense implements ActionListener{
                  
              
                  String sql2 = "insert into "+username+" values(null,'"+month1+"/"+date+"/"+year+"', 'expense','"+expense.getSelectedItem()+"', '"+ta.getText()+"','"+rate+"', '"+currency.getSelectedItem()+"', '"+tsum.getText()+"','"+wonsum+"')";
-//                 String sql2 = "insert into "+username+" values('"+month+"/"+date+"/"+year+"',"+"'"+"expense"+"',"+"'"+expense.getSelectedItem()+"',"+"'"+ta.getText()+"',"+"'"+"rate 입력해줘"+"',"+"'"+currency.getSelectedItem()+"',"+"'"+tsum.getText()+"',"+"'"+"wonsum 입력해줘"+"')";
                  stmt.executeUpdate(sql2);
 
                              
@@ -212,7 +211,7 @@ public class InputExpense implements ActionListener{
      calOpGC.gridy = 3;
      p2.add(currency,calOpGC);
 
-     detailBut = new JButton("input page로 돌아가기");
+     detailBut = new JButton("Back to input page");
      detailBut.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
@@ -223,7 +222,7 @@ public class InputExpense implements ActionListener{
 
      p3.add(detailBut,BorderLayout.SOUTH);
      
-     f.setSize(500, 400);
+     f.setSize(600, 400);
      f.setVisible(true);
      }
 

@@ -1,5 +1,6 @@
 package ledger;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,6 +26,22 @@ public class Category extends JFrame{
    public static String username;
    public int year;
    public int month;
+   
+    public int salary;
+   public int allowance;
+   public int last;
+   public int other_inc;
+   
+   public int food;
+   public int transportation;
+   public int residence;
+   public int clothing;
+   public int tele;
+   public int edu;
+   public int culture;
+   public int events;
+   public int other_exp;
+   
    
    Connection con;
    Statement stmt;
@@ -83,7 +100,7 @@ public class Category extends JFrame{
       
       cateFrame = new JFrame(title);
        cateFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-       cateFrame.setSize(700,700);
+       cateFrame.setSize(1000,900);
        cateFrame.setLocationRelativeTo(null);
        cateFrame.setResizable(false);
         
@@ -287,6 +304,19 @@ public class Category extends JFrame{
                    rs = stmt.executeQuery(sql);
                while(rs.next()){
                       IncomeResult[i].setText("<html><table width=100><tr><th><font size=4><font color=black>"+rs.getInt("catesum")+"KRW</font></th></tr></table></html>");
+                      if(i==0){
+                      salary = rs.getInt("catesum");
+                   }
+                   else if(i==1){
+                      allowance = rs.getInt("catesum");
+                   }
+                   else if(i==2){
+                      last= rs.getInt("catesum");
+                   }
+                   else{
+                      other_inc = rs.getInt("catesum");
+                   }
+                   
                 }              
                IncomeResult[i].removeAll();
                }
@@ -304,6 +334,31 @@ public class Category extends JFrame{
                   rs = stmt.executeQuery(sql2);
                while(rs.next()){
                   ExpenseResult[i].setText("<html><table width=100><tr><th><font size=4><font color=black>"+rs.getInt("catesum")+"KRW</font></th></tr></table></html>");
+                  if(i==0){
+                   food = rs.getInt("catesum");
+                }
+                else if(i==1){
+                   transportation = rs.getInt("catesum");
+                }
+                else if(i==2){
+                   residence = rs.getInt("catesum");
+                }
+                else if(i==3){
+                   clothing = rs.getInt("catesum");
+                }
+                else if(i==4){
+                   tele = rs.getInt("catesum");
+                }
+                else if(i==5){
+                   edu = rs.getInt("catesum");
+                }
+                else if(i==6){
+                   culture = rs.getInt("catesum");
+                }
+                else if(i==7){
+                   events = rs.getInt("catesum");
+                }
+         
                }
                ExpenseResult[i].removeAll();
             }            
@@ -323,6 +378,34 @@ public class Category extends JFrame{
           finally{
              //System.out.println("DB연결 성공!");
           }
+         PieChart2D_Income pie_income = new PieChart2D_Income(salary, allowance, last, other_inc);
+         PieChart2D_Expense pie_expense = new PieChart2D_Expense(food,transportation,residence,clothing, tele, edu, culture, events, other_inc);
+         
+         IncomeGraphP = pie_income.getChartPanel(); //나중에 그래프 붙이기
+         Dimension IncomeSize = IncomeGraphP.getPreferredSize();
+         IncomeSize.height = 200; 
+         IncomeSize.width = 600;
+         IncomeGraphP.setPreferredSize(IncomeSize);
+         
+         IncomeP.setLayout(new BorderLayout());
+         IncomeP.add(IncomeCateP, BorderLayout.WEST);
+         IncomeP.add(IncomeResultP, BorderLayout.CENTER);
+         IncomeP.add(IncomeGraphP, BorderLayout.EAST);
+         
+         //////////////////////////
+         
+         ExpenseGraphP = pie_expense.getChartPanel();
+         Dimension ExpenseSize = ExpenseP.getPreferredSize();
+         ExpenseSize.height = 200;
+         ExpenseSize.width = 600;
+         ExpenseGraphP.setPreferredSize(ExpenseSize);
+         
+         ExpenseP.setLayout(new BorderLayout());
+         ExpenseP.add(ExpenseCateP, BorderLayout.WEST);
+         ExpenseP.add(ExpenseResultP, BorderLayout.CENTER);
+         ExpenseP.add(ExpenseGraphP, BorderLayout.EAST);
+         
       }
+    
    
 }
